@@ -104,7 +104,7 @@ export class UserModel implements IUserModel {
     return new UserModel(user._id, user.name, user.email);
   }
 
-  private async update(token: string, signal: AbortSignal): Promise<this> {
+  public async update(token: string, signal: AbortSignal): Promise<this> {
     const response = await fetch(`${apiUrl}/users/${this._id}`, {
       method: 'PUT',
       headers: {
@@ -122,29 +122,21 @@ export class UserModel implements IUserModel {
     return this;
   }
 
-  private async insert(token: string, signal: AbortSignal): Promise<this> {
+  public async insert(password: string): Promise<this> {
     const response = await fetch(`${apiUrl}/users`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this),
-      signal,
+      body: JSON.stringify({ name: this.name, email: this.email, password }),
     });
     const data = await response.json();
     if (response.status !== STATUS_CREATED) {
       throw new Error(data.error.message);
     }
+    this._id = data.user._id;
     return this;
-  }
-
-  public async save(token: string, signal: AbortSignal): Promise<this> {
-    if (this._id) {
-      return this.update(token, signal);
-    }
-    return this.insert(token, signal);
   }
 
   public async remove(token: string, signal: AbortSignal): Promise<this> {
