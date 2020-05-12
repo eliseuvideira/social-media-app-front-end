@@ -30,17 +30,11 @@ const Users = () => {
   const classes = useStyles();
   const [users, setUsers] = useState<UserModel[]>([]);
   useEffect(() => {
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    UserModel.find(signal).then((users) => {
-      setUsers(users);
-    });
-
-    return function cleanUp() {
-      abortController.abort();
-    };
-  });
+    (async () => {
+      const newUsers = await UserModel.find();
+      setUsers(newUsers);
+    })();
+  }, []);
 
   return (
     <Paper className={classes.root} elevation={4}>

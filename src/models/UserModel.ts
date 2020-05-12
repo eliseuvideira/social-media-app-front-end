@@ -24,7 +24,6 @@ export class UserModel implements IUserModel {
   public static async signIn(
     email: string,
     password: string,
-    signal: AbortSignal,
   ): Promise<[string, UserModel]> {
     const response = await fetch(`${apiUrl}/sign-in`, {
       method: 'POST',
@@ -36,7 +35,6 @@ export class UserModel implements IUserModel {
         email,
         password,
       }),
-      signal,
     });
     if (response.status !== STATUS_OK) {
       const errorData = await response.json();
@@ -49,10 +47,7 @@ export class UserModel implements IUserModel {
     ];
   }
 
-  public static async signOut(
-    token: string,
-    signal: AbortSignal,
-  ): Promise<void> {
+  public static async signOut(token: string): Promise<void> {
     const response = await fetch(`${apiUrl}/sign-out`, {
       method: 'POST',
       headers: {
@@ -60,7 +55,6 @@ export class UserModel implements IUserModel {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      signal,
     });
     if (response.status !== STATUS_OK) {
       const errorData = await response.json();
@@ -68,13 +62,12 @@ export class UserModel implements IUserModel {
     }
   }
 
-  public static async find(signal: AbortSignal): Promise<UserModel[]> {
+  public static async find(): Promise<UserModel[]> {
     const response = await fetch(`${apiUrl}/users`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      signal,
     });
     const data = await response.json();
     if (response.status !== STATUS_OK) {
@@ -85,16 +78,12 @@ export class UserModel implements IUserModel {
     );
   }
 
-  public static async findOne(
-    _id: string,
-    signal: AbortSignal,
-  ): Promise<UserModel> {
+  public static async findOne(_id: string): Promise<UserModel> {
     const response = await fetch(`${apiUrl}/users/${_id}`, {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      signal,
     });
     const data = await response.json();
     if (response.status !== STATUS_OK) {
@@ -104,7 +93,7 @@ export class UserModel implements IUserModel {
     return new UserModel(user._id, user.name, user.email);
   }
 
-  public async update(token: string, signal: AbortSignal): Promise<this> {
+  public async update(token: string): Promise<this> {
     const response = await fetch(`${apiUrl}/users/${this._id}`, {
       method: 'PUT',
       headers: {
@@ -113,7 +102,6 @@ export class UserModel implements IUserModel {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(this),
-      signal,
     });
     const data = await response.json();
     if (response.status !== STATUS_OK) {
@@ -139,7 +127,7 @@ export class UserModel implements IUserModel {
     return this;
   }
 
-  public async remove(token: string, signal: AbortSignal): Promise<this> {
+  public async remove(token: string): Promise<this> {
     if (!this._id) {
       throw new Error(`User not saved`);
     }
@@ -150,7 +138,6 @@ export class UserModel implements IUserModel {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      signal,
     });
     if (response.status !== STATUS_OK_NO_BODY) {
       const data = await response.json();
