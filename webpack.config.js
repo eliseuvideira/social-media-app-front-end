@@ -37,19 +37,12 @@ const config = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   optimization: {
-    minimizer: [
-      new TerserPlugin({
-        cache: true,
-        parallel: true,
-        terserOptions: {
-          compress: true,
-          ecma: 2015,
-          mangle: false,
-        },
-      }),
-    ],
+    minimizer: [new TerserPlugin()],
   },
   performance: false,
+  devServer: {
+    historyApiFallback: true,
+  },
 };
 
 module.exports = config;
