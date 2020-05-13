@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserModel } from '../models/UserModel';
+import { User } from '../models/User';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Paper,
@@ -28,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Users = () => {
   const classes = useStyles();
-  const [users, setUsers] = useState<UserModel[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
     (async () => {
-      const newUsers = await UserModel.find();
+      const newUsers = await User.find();
       setUsers(newUsers);
     })();
   }, []);
@@ -44,7 +44,7 @@ const Users = () => {
       <List dense>
         {users.map((item, i) => {
           return (
-            <Link to={'/user/' + item._id} key={i}>
+            <Link to={'/users/' + item._id} key={i}>
               <ListItem button>
                 <ListItemAvatar>
                   <Avatar>

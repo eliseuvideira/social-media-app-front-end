@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { Session } from '../models/SessionModel';
+import { Session } from '../models/Session';
 import PropTypes from 'prop-types';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
@@ -13,7 +13,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
       Session.isAuthenticated() ? (
         children
       ) : (
-        <Redirect to={{ pathname: '/sign-in', state: { from: location } }} />
+        <Redirect to={{ pathname: '/signin', state: { from: location } }} />
       )
     }
   />

@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 import { User } from '../models/User';
+import { Session } from '../models/Session';
+import { RouteComponentProps, Redirect } from 'react-router';
 import {
   Card,
-  CardContent,
   Typography,
-  TextField,
-  Icon,
+  CardContent,
   Button,
   CardActions,
+  TextField,
+  Icon,
   makeStyles,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -42,46 +38,39 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = () => {
+const SignIn = ({ location: { state } }: RouteComponentProps) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-    name: '',
     email: '',
     password: '',
     error: '',
-    open: false,
+    redirectToReferrer: false,
   });
+
   const onChangeHandler = (name: string) => (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setValues({ ...values, [name]: event.target.value });
   };
   const onSubmitHandler = async () => {
-    const user = new User(null, values.name, values.email);
-    try {
-      await user.insert(values.password);
-    } catch (err) {
-      setValues({ ...values, error: err.message });
-      throw err;
-    }
-    setValues({ ...values, error: '', open: true });
+    const [token] = await User.signIn(values.email, values.password);
+    Session.setToken(token);
+    setValues({ ...values, error: '', redirectToReferrer: true });
   };
+
+  const { from } = (state as any) || { from: { pathname: '/' } };
+
+  if (values.redirectToReferrer) {
+    return <Redirect to={from} />;
+  }
+
   return (
     <div>
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h6" className={classes.title}>
-            Sign Up
+            Sign In
           </Typography>
-          <TextField
-            id="name"
-            label="Name"
-            className={classes.textField}
-            value={values.name}
-            onChange={onChangeHandler('name')}
-            margin="normal"
-          />
-          <br />
           <TextField
             id="email"
             type="email"
@@ -122,23 +111,8 @@ const SignUp = () => {
           </Button>
         </CardActions>
       </Card>
-      <Dialog open={values.open} disableBackdropClick={true}>
-        <DialogTitle>New Account</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            New account successfully created.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Link to="/signin">
-            <Button color="primary" autoFocus variant="contained">
-              Sign In
-            </Button>
-          </Link>
-        </DialogActions>
-      </Dialog>
     </div>
   );
 };
 
-export default SignUp;
+export default SignIn;

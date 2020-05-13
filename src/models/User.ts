@@ -4,13 +4,13 @@ const STATUS_OK = 200;
 const STATUS_CREATED = 201;
 const STATUS_OK_NO_BODY = 204;
 
-interface IUserModel {
+interface IUser {
   _id: string | null;
   name: string;
   email: string;
 }
 
-export class UserModel implements IUserModel {
+export class User implements IUser {
   public _id: string | null;
   public name: string;
   public email: string;
@@ -24,7 +24,7 @@ export class UserModel implements IUserModel {
   public static async signIn(
     email: string,
     password: string,
-  ): Promise<[string, UserModel]> {
+  ): Promise<[string, User]> {
     const response = await fetch(`${apiUrl}/sign-in`, {
       method: 'POST',
       headers: {
@@ -35,7 +35,6 @@ export class UserModel implements IUserModel {
         email,
         password,
       }),
-      credentials: 'include',
     });
     if (response.status !== STATUS_OK) {
       const errorData = await response.json();
@@ -44,7 +43,7 @@ export class UserModel implements IUserModel {
     const data = await response.json();
     return [
       data.token,
-      new UserModel(data.user._id, data.user.name, data.user.email),
+      new User(data.user._id, data.user.name, data.user.email),
     ];
   }
 
@@ -63,7 +62,7 @@ export class UserModel implements IUserModel {
     }
   }
 
-  public static async find(): Promise<UserModel[]> {
+  public static async find(): Promise<User[]> {
     const response = await fetch(`${apiUrl}/users`, {
       headers: {
         Accept: 'application/json',
@@ -75,11 +74,11 @@ export class UserModel implements IUserModel {
       throw new Error(data.error.message);
     }
     return data.users.map(
-      (user: IUserModel) => new UserModel(user._id, user.name, user.email),
+      (user: IUser) => new User(user._id, user.name, user.email),
     );
   }
 
-  public static async findOne(_id: string): Promise<UserModel> {
+  public static async findOne(_id: string): Promise<User> {
     const response = await fetch(`${apiUrl}/users/${_id}`, {
       headers: {
         Accept: 'application/json',
@@ -91,7 +90,7 @@ export class UserModel implements IUserModel {
       throw new Error(data.error.message);
     }
     const { user } = data;
-    return new UserModel(user._id, user.name, user.email);
+    return new User(user._id, user.name, user.email);
   }
 
   public async update(token: string): Promise<this> {

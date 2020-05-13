@@ -9,6 +9,10 @@ export abstract class Session {
     return sessionStorage.getItem(TOKEN_KEY);
   }
 
+  public static setToken(token: string) {
+    sessionStorage.setItem(TOKEN_KEY, token);
+  }
+
   public static clearToken() {
     return sessionStorage.removeItem(TOKEN_KEY);
   }
