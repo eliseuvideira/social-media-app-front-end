@@ -19,7 +19,7 @@ const config = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(png|svg|jpg|gif)$/,
+        test: /\.(ttf|eot|svg|gif|jpg|png)$/,
         use: ['file-loader'],
       },
     ],

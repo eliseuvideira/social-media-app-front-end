@@ -35,6 +35,7 @@ export class UserModel implements IUserModel {
         email,
         password,
       }),
+      credentials: 'include',
     });
     if (response.status !== STATUS_OK) {
       const errorData = await response.json();
