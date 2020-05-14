@@ -5,20 +5,23 @@ const STATUS_CREATED = 201;
 const STATUS_OK_NO_BODY = 204;
 
 interface IUser {
-  _id: string | null;
+  _id?: string;
   name: string;
   email: string;
+  createdAt?: Date;
 }
 
 export class User implements IUser {
-  public _id: string | null;
+  public _id?: string;
   public name: string;
   public email: string;
+  public createdAt?: Date;
 
-  constructor(_id: string | null, name: string, email: string) {
+  constructor({ _id, name, email, createdAt }: IUser) {
     this._id = _id;
     this.name = name;
     this.email = email;
+    this.createdAt = createdAt;
   }
 
   public static async signIn(
@@ -43,7 +46,12 @@ export class User implements IUser {
     const data = await response.json();
     return [
       data.token,
-      new User(data.user._id, data.user.name, data.user.email),
+      new User({
+        _id: data.user._id,
+        name: data.user.name,
+        email: data.user.email,
+        createdAt: data.user.createdAt,
+      }),
     ];
   }
 
@@ -74,14 +82,21 @@ export class User implements IUser {
       throw new Error(data.error.message);
     }
     return data.users.map(
-      (user: IUser) => new User(user._id, user.name, user.email),
+      (user: IUser) =>
+        new User({
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          createdAt: user.createdAt,
+        }),
     );
   }
 
-  public static async findOne(_id: string): Promise<User> {
+  public static async findOne(_id: string, token: string): Promise<User> {
     const response = await fetch(`${apiUrl}/users/${_id}`, {
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
     });
@@ -90,7 +105,12 @@ export class User implements IUser {
       throw new Error(data.error.message);
     }
     const { user } = data;
-    return new User(user._id, user.name, user.email);
+    return new User({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+    });
   }
 
   public async update(token: string): Promise<this> {

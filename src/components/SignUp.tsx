@@ -57,7 +57,7 @@ const SignUp = () => {
     setValues({ ...values, [name]: event.target.value });
   };
   const onSubmitHandler = async () => {
-    const user = new User(null, values.name, values.email);
+    const user = new User({ name: values.name, email: values.email });
     try {
       await user.insert(values.password);
     } catch (err) {
