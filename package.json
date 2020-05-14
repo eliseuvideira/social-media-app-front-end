@@ -28,6 +28,7 @@
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.2.0",
     "husky": "^4.2.5",
+    "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "react-hot-loader": "^4.12.20",
     "terser-webpack-plugin": "^2.3.6",
@@ -42,5 +43,11 @@
     "format": "prettier --check 'src/**/*.{js,ts,tsx}'",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "start": "webpack-dev-server --mode development --hot --inline --open"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint",
+      "prettier --check"
+    ]
   }
 }
