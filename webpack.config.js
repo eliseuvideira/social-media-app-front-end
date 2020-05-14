@@ -9,6 +9,7 @@ const config = {
   output: {
     path: join(__dirname, 'build'),
     filename: 'bundle.js',
+    publicPath: '/',
   },
   devtool: 'source-map',
   module: {
