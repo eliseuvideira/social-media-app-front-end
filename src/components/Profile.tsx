@@ -18,6 +18,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
 import { Session } from '../models/Session';
 import { Link } from 'react-router-dom';
+import DeleteUser from './DeleteUser';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -56,6 +57,7 @@ const Profile = ({
         setRedirectToSignIn(true);
       });
   }, [userId]);
+  const session = Session.getToken();
 
   return (
     <Paper className={classes.root} elevation={4}>
@@ -71,16 +73,16 @@ const Profile = ({
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={user.name} secondary={user.email} />
-            {Session.isAuthenticated() &&
-              Session.getToken()[0]._id == user._id && (
-                <ListItemSecondaryAction>
-                  <Link to={'/users/edit/' + user._id}>
-                    <IconButton aria-label="Edit" color="primary">
-                      <EditIcon />
-                    </IconButton>
-                  </Link>
-                </ListItemSecondaryAction>
-              )}
+            {Session.isAuthenticated() && session[0]._id == user._id && (
+              <ListItemSecondaryAction>
+                <Link to={'/users/edit/' + user._id}>
+                  <IconButton aria-label="Edit" color="primary">
+                    <EditIcon />
+                  </IconButton>
+                </Link>
+                <DeleteUser user={user} token={session[1]} />
+              </ListItemSecondaryAction>
+            )}
           </ListItem>
           <Divider />
           <ListItem>
