@@ -53,8 +53,8 @@ const SignIn = ({ location: { state } }: RouteComponentProps) => {
     setValues({ ...values, [name]: event.target.value });
   };
   const onSubmitHandler = async () => {
-    const [token] = await User.signIn(values.email, values.password);
-    Session.setToken(token);
+    const [user, token] = await User.signIn(values.email, values.password);
+    Session.setToken(user, token);
     setValues({ ...values, error: '', redirectToReferrer: true });
   };
 

@@ -11,9 +11,13 @@ import {
   ListItemText,
   Divider,
   makeStyles,
+  ListItemSecondaryAction,
+  IconButton,
 } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
+import EditIcon from '@material-ui/icons/Edit';
 import { Session } from '../models/Session';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -40,7 +44,7 @@ const Profile = ({
   const classes = useStyles();
 
   useEffect(() => {
-    const token = Session.getToken();
+    const [, token] = Session.getToken();
     if (!token) {
       setRedirectToSignIn(true);
       return;
@@ -67,6 +71,16 @@ const Profile = ({
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={user.name} secondary={user.email} />
+            {Session.isAuthenticated() &&
+              Session.getToken()[0]._id == user._id && (
+                <ListItemSecondaryAction>
+                  <Link to={'/users/edit/' + user._id}>
+                    <IconButton aria-label="Edit" color="primary">
+                      <EditIcon />
+                    </IconButton>
+                  </Link>
+                </ListItemSecondaryAction>
+              )}
           </ListItem>
           <Divider />
           <ListItem>

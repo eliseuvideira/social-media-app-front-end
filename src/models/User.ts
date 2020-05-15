@@ -27,7 +27,7 @@ export class User implements IUser {
   public static async signIn(
     email: string,
     password: string,
-  ): Promise<[string, User]> {
+  ): Promise<[User, string]> {
     const response = await fetch(`${apiUrl}/sign-in`, {
       method: 'POST',
       headers: {
@@ -45,13 +45,13 @@ export class User implements IUser {
     }
     const data = await response.json();
     return [
-      data.token,
       new User({
         _id: data.user._id,
         name: data.user.name,
         email: data.user.email,
         createdAt: data.user.createdAt,
       }),
+      data.token,
     ];
   }
 
