@@ -8,11 +8,11 @@ export abstract class Session {
     return sessionStorage.getItem(TOKEN_KEY) != null;
   }
 
-  public static getToken(): [User, string] {
+  public static getToken(): [User, string] | [null, null] {
     const userData = sessionStorage.getItem(USER_KEY);
     const token = sessionStorage.getItem(TOKEN_KEY);
     if (!token || !userData) {
-      throw new Error('No token found');
+      return [null, null];
     }
     const user = new User({ ...JSON.parse(userData) });
     return [user, token];

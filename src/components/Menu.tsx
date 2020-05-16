@@ -28,7 +28,7 @@ const getStyle = (active: boolean) => {
 const Menu = withRouter(({ history }) => {
   const classes = useStyles();
   const isAuth = Session.isAuthenticated();
-  const [user] = isAuth ? Session.getToken() : [null];
+  const [user] = Session.getToken();
 
   return (
     <AppBar position="static">

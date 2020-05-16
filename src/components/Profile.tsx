@@ -40,15 +40,11 @@ const Profile = ({
   const [user, setUser] = useState<null | User>(null);
   const [redirectToSignIn, setRedirectToSignIn] = useState(false);
 
-  if (!userId || !Session.isAuthenticated() || redirectToSignIn) {
-    return <Redirect to="/signin" />;
-  }
-
   const classes = useStyles();
+  const [loggedUser, token] = Session.getToken();
 
   useEffect(() => {
-    const [, token] = Session.getToken();
-    if (!token) {
+    if (!token || !userId) {
       setRedirectToSignIn(true);
       return;
     }
@@ -59,7 +55,14 @@ const Profile = ({
         setRedirectToSignIn(true);
       });
   }, [userId]);
-  const session = Session.getToken();
+
+  if (!loggedUser || !token || redirectToSignIn) {
+    return (
+      <Redirect
+        to={{ pathname: '/signin', state: { from: `/users/${userId}` } }}
+      />
+    );
+  }
 
   return (
     <Paper className={classes.root} elevation={4}>
@@ -75,14 +78,14 @@ const Profile = ({
               </Avatar>
             </ListItemAvatar>
             <ListItemText primary={user.name} secondary={user.email} />
-            {Session.isAuthenticated() && session[0]._id == user._id && (
+            {Session.isAuthenticated() && loggedUser._id == user._id && (
               <ListItemSecondaryAction>
                 <Link to={`/users/${user._id}/edit`}>
                   <IconButton aria-label="Edit" color="primary">
                     <EditIcon />
                   </IconButton>
                 </Link>
-                <DeleteUser user={user} token={session[1]} />
+                <DeleteUser user={user} token={token} />
               </ListItemSecondaryAction>
             )}
           </ListItem>

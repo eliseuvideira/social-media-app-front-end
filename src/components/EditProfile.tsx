@@ -45,13 +45,14 @@ const EditProfile = ({
 }: RouteComponentProps<{ userId?: string }>) => {
   const classes = useStyles();
 
-  const [user, token] = Session.getToken();
   const [values, setValues] = useState({
-    name: user.name,
-    email: user.email,
+    name: '',
+    email: '',
     error: '',
     redirectToProfile: false,
   });
+
+  const [user, token] = Session.getToken();
 
   useEffect(() => {
     if (!token || !userId) {
