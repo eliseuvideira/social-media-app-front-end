@@ -5,13 +5,16 @@ import Users from './components/Users';
 import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import Profile from './components/Profile';
+import PrivateRoute from './components/PrivateRoute';
+import EditProfile from './components/EditProfile';
 
 const Router = () => (
   <Switch>
     <Route exact path="/" component={Home} />
     <Route exact path="/users" component={Users} />
-    <Route path="/signup" component={SignUp} />
-    <Route path="/signin" component={SignIn} />
+    <Route exact path="/signup" component={SignUp} />
+    <Route exact path="/signin" component={SignIn} />
+    <PrivateRoute exact path="/users/:userId/edit" component={EditProfile} />
     <Route exact path="/users/:userId" component={Profile} />
   </Switch>
 );

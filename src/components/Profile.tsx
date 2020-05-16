@@ -75,7 +75,7 @@ const Profile = ({
             <ListItemText primary={user.name} secondary={user.email} />
             {Session.isAuthenticated() && session[0]._id == user._id && (
               <ListItemSecondaryAction>
-                <Link to={'/users/edit/' + user._id}>
+                <Link to={`/users/${user._id}/edit`}>
                   <IconButton aria-label="Edit" color="primary">
                     <EditIcon />
                   </IconButton>

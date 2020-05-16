@@ -121,7 +121,7 @@ export class User implements IUser {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(this),
+      body: JSON.stringify({ name: this.name }),
     });
     const data = await response.json();
     if (response.status !== STATUS_OK) {

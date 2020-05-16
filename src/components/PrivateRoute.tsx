@@ -1,17 +1,19 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { Session } from '../models/Session';
 import PropTypes from 'prop-types';
 
-const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
+const PrivateRoute: React.FC<RouteProps> = ({
+  component: Component,
   ...props
+}: {
+  component?: any;
 }) => (
   <Route
     {...props}
-    render={({ location }) =>
+    render={({ location, match, history }) =>
       Session.isAuthenticated() ? (
-        children
+        <Component {...{ ...props, location, match, history }} />
       ) : (
         <Redirect to={{ pathname: '/signin', state: { from: location } }} />
       )
@@ -20,7 +22,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
 );
 
 PrivateRoute.propTypes = {
-  children: PropTypes.node,
+  component: PropTypes.any,
 };
 
 export default PrivateRoute;
