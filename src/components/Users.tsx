@@ -18,8 +18,10 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
+    maxWidth: 600,
+    margin: 'auto',
+    marginTop: theme.spacing(5),
     padding: theme.spacing(1),
-    margin: theme.spacing(5),
   }),
   title: {
     margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
