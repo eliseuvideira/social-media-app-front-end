@@ -48,6 +48,7 @@ const EditProfile = ({
   const [values, setValues] = useState({
     name: '',
     email: '',
+    password: '',
     error: '',
     redirectToProfile: false,
   });
@@ -77,7 +78,7 @@ const EditProfile = ({
     user.name = values.name;
     user.email = values.email;
     try {
-      await user.update(token);
+      await user.update(token, values.password || undefined);
       setValues({ ...values, redirectToProfile: true });
     } catch (err) {
       setValues({ ...values, error: err.message });
@@ -111,6 +112,16 @@ const EditProfile = ({
           className={classes.textField}
           value={values.email}
           onChange={onChange('email')}
+          margin="normal"
+        />
+        <br />
+        <TextField
+          id="password"
+          label="Password"
+          type="password"
+          className={classes.textField}
+          value={values.password}
+          onChange={onChange('password')}
           margin="normal"
         />
         <br />

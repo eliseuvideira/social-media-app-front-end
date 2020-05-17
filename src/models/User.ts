@@ -113,7 +113,10 @@ export class User implements IUser {
     });
   }
 
-  public async update(token: string): Promise<this> {
+  public async update(
+    token: string,
+    password: string | undefined = undefined,
+  ): Promise<this> {
     const response = await fetch(`${apiUrl}/users/${this._id}`, {
       method: 'PUT',
       headers: {
@@ -121,7 +124,7 @@ export class User implements IUser {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: this.name }),
+      body: JSON.stringify({ name: this.name, email: this.email, password }),
     });
     const data = await response.json();
     if (response.status !== STATUS_OK) {
