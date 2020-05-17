@@ -35,7 +35,7 @@ const DeleteUser: React.FC<{ user: User; token: string }> = ({
 
   return (
     <span>
-      <IconButton aria-label="Delete" onClick={onClick} color="secondary">
+      <IconButton aria-label="Delete" onClick={onClick} color="primary">
         <DeleteIcon />
       </IconButton>
       <Dialog open={open} onClick={onClose}>

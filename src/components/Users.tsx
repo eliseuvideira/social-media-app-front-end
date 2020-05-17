@@ -14,21 +14,21 @@ import {
 } from '@material-ui/core';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import Person from '@material-ui/icons/Person';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
     maxWidth: 600,
     margin: 'auto',
     marginTop: theme.spacing(5),
-    padding: theme.spacing(1),
+    padding: theme.spacing(3),
   }),
   title: {
-    margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
+    marginTop: theme.spacing(1),
   },
 }));
 
-const Users = () => {
+const Users = withRouter(({ history }) => {
   const classes = useStyles();
   const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
@@ -46,26 +46,24 @@ const Users = () => {
       <List dense>
         {users.map((item, i) => {
           return (
-            <Link to={'/users/' + item._id} key={i}>
-              <ListItem button>
-                <ListItemAvatar>
-                  <Avatar>
-                    <Person />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={item.name} />
-                <ListItemSecondaryAction>
-                  <IconButton>
-                    <ArrowForward />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            </Link>
+            <ListItem button component={Link} to={`/users/${item._id}`} key={i}>
+              <ListItemAvatar>
+                <Avatar>
+                  <Person />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={item.name} />
+              <ListItemSecondaryAction>
+                <IconButton onClick={() => history.push(`/users/${item._id}`)}>
+                  <ArrowForward />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
           );
         })}
       </List>
     </Paper>
   );
-};
+});
 
 export default Users;

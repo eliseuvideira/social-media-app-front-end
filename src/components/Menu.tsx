@@ -9,7 +9,7 @@ import {
   Container,
 } from '@material-ui/core';
 import { Link, withRouter } from 'react-router-dom';
-import HomeIcon from '@material-ui/icons/Home';
+import MenuIcon from '@material-ui/icons/Menu';
 import { Session } from '../models/Session';
 
 const useStyles = makeStyles(() => ({
@@ -18,11 +18,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const getStyle = (active: boolean) => {
+const getColor = (active: boolean): 'secondary' | 'inherit' => {
   if (active) {
-    return { color: '#ff4081' };
+    return 'secondary';
   }
-  return { color: '#ffffff' };
+  return 'inherit';
 };
 
 const Menu = withRouter(({ history }) => {
@@ -34,33 +34,31 @@ const Menu = withRouter(({ history }) => {
     <AppBar position="static">
       <Container maxWidth="lg">
         <Toolbar>
-          <Link to="/">
-            <IconButton
-              aria-label="Home"
-              style={getStyle(history.location.pathname === '/')}
-            >
-              <HomeIcon />
-            </IconButton>
-          </Link>
+          <IconButton color="inherit" onClick={() => history.push('/')}>
+            <MenuIcon />
+          </IconButton>
           <Typography variant="h6" color="inherit">
             MERN Skeleton
           </Typography>
-          <Link to="/users" className={classes.marginLeftAuto}>
-            <Button style={getStyle(history.location.pathname === '/users')}>
-              Users
-            </Button>
-          </Link>
+          <Button
+            color={getColor(history.location.pathname === '/users')}
+            component={Link}
+            to="/users"
+            className={classes.marginLeftAuto}
+          >
+            Users
+          </Button>
           {isAuth && user ? (
             <span>
-              <Link to={`/users/${user._id}`}>
-                <Button
-                  style={getStyle(
-                    history.location.pathname === `/users/${user._id}`,
-                  )}
-                >
-                  My Profile
-                </Button>
-              </Link>
+              <Button
+                component={Link}
+                to={`/users/${user._id}`}
+                color={getColor(
+                  history.location.pathname === `/users/${user._id}`,
+                )}
+              >
+                My Profile
+              </Button>
               <Button
                 color="inherit"
                 onClick={() => {
@@ -73,20 +71,21 @@ const Menu = withRouter(({ history }) => {
             </span>
           ) : (
             <span>
-              <Link to="/signup">
-                <Button
-                  style={getStyle(history.location.pathname === '/signup')}
-                >
-                  Sign Up
-                </Button>
-              </Link>
-              <Link to="/signin">
-                <Button
-                  style={getStyle(history.location.pathname === '/signin')}
-                >
-                  Sign In
-                </Button>
-              </Link>
+              <Button
+                color={getColor(history.location.pathname === '/signup')}
+                component={Link}
+                to="/signup"
+              >
+                Sign Up
+              </Button>
+              <Button
+                color={getColor(history.location.pathname === '/signin')}
+                component={Link}
+                to="/signin"
+                variant="outlined"
+              >
+                Sign In
+              </Button>
             </span>
           )}
         </Toolbar>

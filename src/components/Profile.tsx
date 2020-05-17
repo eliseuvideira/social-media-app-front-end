@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(5),
   }),
   title: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
   },
 }));
 

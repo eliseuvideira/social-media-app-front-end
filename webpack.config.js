@@ -1,9 +1,11 @@
 /* eslint-disable */
+const webpack = require('webpack');
 const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DotEnvPlugin = require('dotenv-webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
+/** @type {webpack.Configuration} */
 const config = {
   entry: ['react-hot-loader/patch', join(__dirname, 'src', 'index.tsx')],
   output: {
@@ -11,7 +13,8 @@ const config = {
     filename: 'bundle.js',
     publicPath: '/',
   },
-  devtool: 'source-map',
+  devtool:
+    process.env.NODE_ENV === 'development' ? 'inline-source-map' : 'source-map',
   module: {
     rules: [
       {
