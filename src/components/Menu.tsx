@@ -38,7 +38,7 @@ const Menu = withRouter(({ history }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" color="inherit">
-            MERN Skeleton
+            MERN Social
           </Typography>
           <Button
             color={getColor(history.location.pathname === '/users')}
