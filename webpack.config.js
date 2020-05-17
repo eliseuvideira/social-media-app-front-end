@@ -34,6 +34,7 @@ const config = {
       favicon: join(__dirname, 'public', 'favicon.ico'),
     }),
     new DotEnvPlugin({
+      systemvars: true,
       safe: true,
     }),
   ],
