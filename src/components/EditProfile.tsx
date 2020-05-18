@@ -12,6 +12,7 @@ import {
   Icon,
 } from '@material-ui/core';
 import { User } from '../models/User';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -36,6 +37,9 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     marginBottom: theme.spacing(2),
   },
+  filename: {
+    marginLeft: '10px',
+  },
 }));
 
 const EditProfile = ({
@@ -45,7 +49,15 @@ const EditProfile = ({
 }: RouteComponentProps<{ userId?: string }>) => {
   const classes = useStyles();
 
-  const [values, setValues] = useState({
+  const [values, setValues] = useState<{
+    name: string;
+    email: string;
+    password: string;
+    about: string;
+    photo?: any;
+    error: string;
+    redirectToProfile: boolean;
+  }>({
     name: '',
     email: '',
     password: '',
@@ -85,7 +97,11 @@ const EditProfile = ({
     user.email = values.email;
     user.about = values.about;
     try {
-      await user.update(token, values.password || undefined);
+      await user.update(
+        token,
+        values.password || undefined,
+        values.photo || undefined,
+      );
       setValues({ ...values, redirectToProfile: true });
     } catch (err) {
       setValues({ ...values, error: err.message });
@@ -98,12 +114,36 @@ const EditProfile = ({
     setValues({ ...values, [key]: e.target.value });
   };
 
+  const onPhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValues({
+      ...values,
+      photo: event.target.files ? event.target.files[0] : undefined,
+    });
+  };
+
   return (
     <Card className={classes.card}>
       <CardContent>
         <Typography variant="h6" className={classes.title}>
           Edit Profile
         </Typography>
+        <input
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={onPhotoChange}
+          id="icon-button-file"
+        />
+        <label htmlFor="icon-button-file">
+          <Button variant="contained" color="default" component="span">
+            Upload <AddPhotoAlternateIcon />
+          </Button>
+        </label>
+        <br />
+        <span className={classes.filename}>
+          {values.photo ? values.photo.name : ''}
+        </span>
+        <br />
         <TextField
           id="name"
           label="Name"

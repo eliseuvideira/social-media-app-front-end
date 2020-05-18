@@ -73,9 +73,13 @@ const Profile = ({
         <List dense>
           <ListItem>
             <ListItemAvatar>
-              <Avatar>
-                <PersonIcon />
-              </Avatar>
+              {user.photo ? (
+                <Avatar src={user.photo.url} />
+              ) : (
+                <Avatar>
+                  <PersonIcon />
+                </Avatar>
+              )}
             </ListItemAvatar>
             <ListItemText primary={user.name} secondary={user.email} />
             {Session.isAuthenticated() && loggedUser._id == user._id && (

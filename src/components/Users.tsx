@@ -13,7 +13,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 import ArrowForward from '@material-ui/icons/ArrowForward';
-import Person from '@material-ui/icons/Person';
+import PersonIcon from '@material-ui/icons/Person';
 import { Link, withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
@@ -44,17 +44,21 @@ const Users = withRouter(({ history }) => {
         All Users
       </Typography>
       <List dense>
-        {users.map((item, i) => {
+        {users.map((user, i) => {
           return (
-            <ListItem button component={Link} to={`/users/${item._id}`} key={i}>
+            <ListItem button component={Link} to={`/users/${user._id}`} key={i}>
               <ListItemAvatar>
-                <Avatar>
-                  <Person />
-                </Avatar>
+                {user.photo ? (
+                  <Avatar src={user.photo.url} />
+                ) : (
+                  <Avatar>
+                    <PersonIcon />
+                  </Avatar>
+                )}
               </ListItemAvatar>
-              <ListItemText primary={item.name} />
+              <ListItemText primary={user.name} />
               <ListItemSecondaryAction>
-                <IconButton onClick={() => history.push(`/users/${item._id}`)}>
+                <IconButton onClick={() => history.push(`/users/${user._id}`)}>
                   <ArrowForward />
                 </IconButton>
               </ListItemSecondaryAction>

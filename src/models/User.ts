@@ -10,6 +10,11 @@ interface IUser {
   email: string;
   createdAt?: Date;
   about?: string;
+  photo?: {
+    url: string;
+    filename: string;
+    contentType: string;
+  };
 }
 
 export class User implements IUser {
@@ -18,13 +23,19 @@ export class User implements IUser {
   public email: string;
   public createdAt?: Date;
   public about?: string;
+  public photo?: {
+    url: string;
+    filename: string;
+    contentType: string;
+  };
 
-  constructor({ _id, name, email, createdAt, about }: IUser) {
+  constructor({ _id, name, email, createdAt, about, photo }: IUser) {
     this._id = _id;
     this.name = name;
     this.email = email;
     this.createdAt = createdAt;
     this.about = about;
+    this.photo = photo;
   }
 
   public static async signIn(
@@ -54,6 +65,7 @@ export class User implements IUser {
         email: data.user.email,
         createdAt: data.user.createdAt,
         about: data.user.about,
+        photo: data.user.photo,
       }),
       data.token,
     ];
@@ -93,6 +105,7 @@ export class User implements IUser {
           email: user.email,
           createdAt: user.createdAt,
           about: user.about,
+          photo: user.photo,
         }),
     );
   }
@@ -116,26 +129,29 @@ export class User implements IUser {
       email: user.email,
       createdAt: user.createdAt,
       about: user.about,
+      photo: user.photo,
     });
   }
 
   public async update(
     token: string,
     password: string | undefined = undefined,
+    photo: File | undefined = undefined,
   ): Promise<this> {
+    const userData = new FormData();
+    userData.append('name', this.name);
+    userData.append('email', this.email);
+    this.about && userData.append('about', this.about);
+    password && userData.append('password', password);
+    photo && userData.append('photo', photo);
+
     const response = await fetch(`${apiUrl}/users/${this._id}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name: this.name,
-        email: this.email,
-        password,
-        about: this.about,
-      }),
+      body: userData,
     });
     const data = await response.json();
     if (response.status !== STATUS_OK) {
