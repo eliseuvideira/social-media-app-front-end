@@ -5,6 +5,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DotEnvPlugin = require('dotenv-webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 
+require('dotenv-safe').config();
+
 /** @type {webpack.Configuration} */
 const config = {
   entry: ['react-hot-loader/patch', join(__dirname, 'src', 'index.tsx')],
@@ -35,7 +37,6 @@ const config = {
     }),
     new DotEnvPlugin({
       systemvars: true,
-      safe: true,
     }),
   ],
   resolve: {
