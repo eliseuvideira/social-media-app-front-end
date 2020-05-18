@@ -9,6 +9,7 @@ interface IUser {
   name: string;
   email: string;
   createdAt?: Date;
+  about?: string;
 }
 
 export class User implements IUser {
@@ -16,12 +17,14 @@ export class User implements IUser {
   public name: string;
   public email: string;
   public createdAt?: Date;
+  public about?: string;
 
-  constructor({ _id, name, email, createdAt }: IUser) {
+  constructor({ _id, name, email, createdAt, about }: IUser) {
     this._id = _id;
     this.name = name;
     this.email = email;
     this.createdAt = createdAt;
+    this.about = about;
   }
 
   public static async signIn(
@@ -50,6 +53,7 @@ export class User implements IUser {
         name: data.user.name,
         email: data.user.email,
         createdAt: data.user.createdAt,
+        about: data.user.about,
       }),
       data.token,
     ];
@@ -88,6 +92,7 @@ export class User implements IUser {
           name: user.name,
           email: user.email,
           createdAt: user.createdAt,
+          about: user.about,
         }),
     );
   }
@@ -110,6 +115,7 @@ export class User implements IUser {
       name: user.name,
       email: user.email,
       createdAt: user.createdAt,
+      about: user.about,
     });
   }
 
@@ -124,7 +130,12 @@ export class User implements IUser {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: this.name, email: this.email, password }),
+      body: JSON.stringify({
+        name: this.name,
+        email: this.email,
+        password,
+        about: this.about,
+      }),
     });
     const data = await response.json();
     if (response.status !== STATUS_OK) {
@@ -140,7 +151,12 @@ export class User implements IUser {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name: this.name, email: this.email, password }),
+      body: JSON.stringify({
+        name: this.name,
+        email: this.email,
+        password,
+        about: this.about,
+      }),
     });
     const data = await response.json();
     if (response.status !== STATUS_CREATED) {

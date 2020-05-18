@@ -92,7 +92,8 @@ const Profile = ({
           <Divider />
           <ListItem>
             <ListItemText
-              primary={`Joined: ${(user.createdAt
+              primary={user.about}
+              secondary={`Joined: ${(user.createdAt
                 ? new Date(user.createdAt)
                 : new Date()
               ).toDateString()}`}

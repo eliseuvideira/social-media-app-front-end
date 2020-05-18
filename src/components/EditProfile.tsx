@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 300,
+    width: '90%',
   },
   submit: {
     margin: 'auto',
@@ -49,6 +49,7 @@ const EditProfile = ({
     name: '',
     email: '',
     password: '',
+    about: '',
     error: '',
     redirectToProfile: false,
   });
@@ -62,7 +63,12 @@ const EditProfile = ({
     }
     User.findOne(userId!, token)
       .then((foundUser) =>
-        setValues({ ...values, name: foundUser.name, email: foundUser.email }),
+        setValues({
+          ...values,
+          name: foundUser.name,
+          email: foundUser.email,
+          about: foundUser.about || '',
+        }),
       )
       .catch((err) => {
         console.error(err);
@@ -77,6 +83,7 @@ const EditProfile = ({
   const onSubmit = async () => {
     user.name = values.name;
     user.email = values.email;
+    user.about = values.about;
     try {
       await user.update(token, values.password || undefined);
       setValues({ ...values, redirectToProfile: true });
@@ -104,6 +111,16 @@ const EditProfile = ({
           value={values.name}
           onChange={onChange('name')}
           margin="normal"
+        />
+        <br />
+        <TextField
+          id="multiline-flexible"
+          label="About"
+          className={classes.textField}
+          multiline
+          rows="2"
+          value={values.about}
+          onChange={onChange('about')}
         />
         <br />
         <TextField
