@@ -130,11 +130,14 @@ const SignUp = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Link to="/signin">
-            <Button color="primary" autoFocus variant="contained">
-              Sign In
-            </Button>
-          </Link>
+          <Button
+            color="primary"
+            variant="contained"
+            component={Link}
+            to="/signin"
+          >
+            Sign In
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
