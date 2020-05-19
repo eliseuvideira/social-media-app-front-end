@@ -19,6 +19,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { Session } from '../models/Session';
 import { Link } from 'react-router-dom';
 import DeleteUser from './DeleteUser';
+import FollowButton from './FollowButton';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -43,17 +44,22 @@ const Profile = ({
   const classes = useStyles();
   const [loggedUser, token] = Session.getToken();
 
-  useEffect(() => {
+  const fetchUser = async () => {
     if (!token || !userId) {
       setRedirectToSignIn(true);
       return;
     }
+
     User.findOne(userId, token)
       .then((foundUser) => setUser(foundUser))
       .catch((err) => {
         console.error(err);
         setRedirectToSignIn(true);
       });
+  };
+
+  useEffect(() => {
+    fetchUser();
   }, [userId]);
 
   if (!loggedUser || !token || redirectToSignIn) {
@@ -63,6 +69,27 @@ const Profile = ({
       />
     );
   }
+
+  const isFollowing = () => {
+    if (!user) {
+      return false;
+    }
+    return (user.followers || [])
+      .map((follower) => follower._id)
+      .includes(loggedUser._id || '');
+  };
+
+  const onClickFollow = async () => {
+    if (!user) {
+      return;
+    }
+    if (isFollowing()) {
+      await user.unfollow(token);
+    } else {
+      await user.follow(token);
+    }
+    await fetchUser();
+  };
 
   return (
     <Paper className={classes.root} elevation={4}>
@@ -82,7 +109,7 @@ const Profile = ({
               )}
             </ListItemAvatar>
             <ListItemText primary={user.name} secondary={user.email} />
-            {Session.isAuthenticated() && loggedUser._id == user._id && (
+            {Session.isAuthenticated() && loggedUser._id == user._id ? (
               <ListItemSecondaryAction>
                 <Link to={`/users/${user._id}/edit`}>
                   <IconButton aria-label="Edit" color="primary">
@@ -91,6 +118,8 @@ const Profile = ({
                 </Link>
                 <DeleteUser user={user} token={token} />
               </ListItemSecondaryAction>
+            ) : (
+              <FollowButton following={isFollowing()} onClick={onClickFollow} />
             )}
           </ListItem>
           <Divider />

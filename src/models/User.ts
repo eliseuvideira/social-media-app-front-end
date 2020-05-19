@@ -4,6 +4,11 @@ const STATUS_OK = 200;
 const STATUS_CREATED = 201;
 const STATUS_OK_NO_BODY = 204;
 
+interface IUserSummary {
+  _id: string;
+  name: string;
+}
+
 interface IUser {
   _id?: string;
   name: string;
@@ -15,6 +20,8 @@ interface IUser {
     filename: string;
     contentType: string;
   };
+  followers?: IUserSummary[];
+  following?: IUserSummary[];
 }
 
 export class User implements IUser {
@@ -28,14 +35,27 @@ export class User implements IUser {
     filename: string;
     contentType: string;
   };
+  public followers?: IUserSummary[];
+  public following?: IUserSummary[];
 
-  constructor({ _id, name, email, createdAt, about, photo }: IUser) {
+  constructor({
+    _id,
+    name,
+    email,
+    createdAt,
+    about,
+    photo,
+    followers,
+    following,
+  }: IUser) {
     this._id = _id;
     this.name = name;
     this.email = email;
     this.createdAt = createdAt;
     this.about = about;
     this.photo = photo;
+    this.followers = followers;
+    this.following = following;
   }
 
   public static async signIn(
@@ -66,6 +86,8 @@ export class User implements IUser {
         createdAt: data.user.createdAt,
         about: data.user.about,
         photo: data.user.photo,
+        followers: data.user.followers,
+        following: data.user.following,
       }),
       data.token,
     ];
@@ -106,6 +128,8 @@ export class User implements IUser {
           createdAt: user.createdAt,
           about: user.about,
           photo: user.photo,
+          followers: user.followers,
+          following: user.following,
         }),
     );
   }
@@ -130,6 +154,8 @@ export class User implements IUser {
       createdAt: user.createdAt,
       about: user.about,
       photo: user.photo,
+      followers: user.followers,
+      following: user.following,
     });
   }
 
@@ -199,5 +225,35 @@ export class User implements IUser {
       throw new Error(data.error.message);
     }
     return this;
+  }
+
+  public async follow(token: string): Promise<void> {
+    const response = await fetch(`${apiUrl}/users/${this._id}/follow`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status !== STATUS_OK) {
+      const data = await response.json();
+      throw new Error(data.error.message);
+    }
+  }
+
+  public async unfollow(token: string): Promise<void> {
+    const response = await fetch(`${apiUrl}/users/${this._id}/unfollow`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.status !== STATUS_OK) {
+      const data = await response.json();
+      throw new Error(data.error.message);
+    }
   }
 }
