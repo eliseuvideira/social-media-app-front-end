@@ -259,4 +259,20 @@ export class User implements IUser {
       throw new Error(data.error.message);
     }
   }
+
+  public async findPeople(token: string): Promise<User[]> {
+    const response = await fetch(`${apiUrl}/users/${this._id}/find-people`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (response.status !== STATUS_OK) {
+      throw new Error(data.error.message);
+    }
+    return data.users.map((user: any) => new User(user));
+  }
 }
