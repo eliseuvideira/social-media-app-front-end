@@ -20,6 +20,7 @@ import { Session } from '../models/Session';
 import { Link } from 'react-router-dom';
 import DeleteUser from './DeleteUser';
 import FollowButton from './FollowButton';
+import UsersGrid from './UsersGrid';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
@@ -132,6 +133,10 @@ const Profile = ({
               ).toDateString()}`}
             />
           </ListItem>
+          <Typography>Followers</Typography>
+          <UsersGrid users={user.followers || []} />
+          <Typography>Following</Typography>
+          <UsersGrid users={user.following || []} />
         </List>
       )}
     </Paper>

@@ -7,6 +7,9 @@ const STATUS_OK_NO_BODY = 204;
 interface IUserSummary {
   _id: string;
   name: string;
+  photo: {
+    url: string;
+  };
 }
 
 interface IUser {
