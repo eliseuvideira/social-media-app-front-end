@@ -8,6 +8,7 @@ import imageCover from '../assets/images/cover.jpg';
 import { Grid } from '@material-ui/core';
 import { Session } from '../models/Session';
 import FindPeople from './FindPeople';
+import Newsfeed from './Newsfeed';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -37,7 +38,10 @@ const Home = () => {
     <div className={classes.root}>
       {loggedUser && token ? (
         <Grid container spacing={8} justify="center">
-          <Grid item xs={4} sm={4}>
+          <Grid item xs={8} sm={7}>
+            <Newsfeed />
+          </Grid>
+          <Grid item xs={4} sm={5}>
             <FindPeople />
           </Grid>
         </Grid>
