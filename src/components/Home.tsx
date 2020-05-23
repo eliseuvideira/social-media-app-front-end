@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import imageCover from '../assets/images/cover.jpg';
-import { Grid, Container } from '@material-ui/core';
+import { Grid, Container, Hidden } from '@material-ui/core';
 import { Session } from '../models/Session';
 import FindPeople from './FindPeople';
 import Newsfeed from './Newsfeed';
@@ -49,12 +49,14 @@ const Home = () => {
       <div className={classes.root}>
         {loggedUser && token ? (
           <Grid container spacing={8} justify="center">
-            <Grid item xs={8} sm={7}>
+            <Grid item xs={12} md={7}>
               <Newsfeed />
             </Grid>
-            <Grid item xs={4} sm={5}>
-              <FindPeople />
-            </Grid>
+            <Hidden mdDown>
+              <Grid item md={5}>
+                <FindPeople />
+              </Grid>
+            </Hidden>
           </Grid>
         ) : (
           <Card className={classes.card}>

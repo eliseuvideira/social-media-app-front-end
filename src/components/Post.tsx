@@ -20,10 +20,15 @@ import PropTypes from 'prop-types';
 import { Post } from '../models/Post';
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    width: '100%',
+    heigth: '100%',
+    padding: theme.spacing(1),
+  },
   card: {
     maxWidth: 600,
     margin: 'auto',
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(1),
     backgroundColor: 'rgba(0, 0, 0, 0.06)',
   },
   cardContent: {
@@ -67,72 +72,74 @@ const PostComponent: React.FC<{
   };
 
   return (
-    <Card className={classes.card}>
-      <CardHeader
-        avatar={
-          post.postedBy.photo ? (
-            <Avatar src={post.postedBy.photo.url} />
-          ) : (
-            <Avatar>
-              <PersonIcon />
-            </Avatar>
-          )
-        }
-        action={
-          loggedUser &&
-          loggedUser._id === post.postedBy._id && (
-            <IconButton onClick={deletePost}>
-              <DeleteIcon />
+    <div className={classes.wrapper}>
+      <Card className={classes.card}>
+        <CardHeader
+          avatar={
+            post.postedBy.photo ? (
+              <Avatar src={post.postedBy.photo.url} />
+            ) : (
+              <Avatar>
+                <PersonIcon />
+              </Avatar>
+            )
+          }
+          action={
+            loggedUser &&
+            loggedUser._id === post.postedBy._id && (
+              <IconButton onClick={deletePost}>
+                <DeleteIcon />
+              </IconButton>
+            )
+          }
+          title={
+            <Link to={`/users/${post.postedBy._id}`}>{post.postedBy.name}</Link>
+          }
+          subheader={new Date(post.createdAt || new Date()).toDateString()}
+          className={classes.cardHeader}
+        />
+        <CardContent className={classes.cardContent}>
+          <Typography component="p" className={classes.text}>
+            {post.content}
+          </Typography>
+          {post.photo && (
+            <div className={classes.photo}>
+              <img className={classes.media} src={post.photo.url} />
+            </div>
+          )}
+        </CardContent>
+        <CardActions>
+          {(post.likes || []).includes((loggedUser || { _id: null })._id) ? (
+            <IconButton
+              onClick={onClickDislike}
+              className={classes.button}
+              aria-label="Dislike"
+              color="secondary"
+            >
+              <FavoriteIcon />
             </IconButton>
-          )
-        }
-        title={
-          <Link to={`/users/${post.postedBy._id}`}>{post.postedBy.name}</Link>
-        }
-        subheader={new Date(post.createdAt || new Date()).toDateString()}
-        className={classes.cardHeader}
-      />
-      <CardContent className={classes.cardContent}>
-        <Typography component="p" className={classes.text}>
-          {post.content}
-        </Typography>
-        {post.photo && (
-          <div className={classes.photo}>
-            <img className={classes.media} src={post.photo.url} />
-          </div>
-        )}
-      </CardContent>
-      <CardActions>
-        {(post.likes || []).includes((loggedUser || { _id: null })._id) ? (
+          ) : (
+            <IconButton
+              onClick={onClickLike}
+              className={classes.button}
+              aria-label="Like"
+              color="secondary"
+            >
+              <FavoriteBorderIcon />
+            </IconButton>
+          )}
+          <span>{(post.likes || []).length}</span>
           <IconButton
-            onClick={onClickDislike}
             className={classes.button}
-            aria-label="Dislike"
+            aria-label="Comment"
             color="secondary"
           >
-            <FavoriteIcon />
+            <CommentIcon />
           </IconButton>
-        ) : (
-          <IconButton
-            onClick={onClickLike}
-            className={classes.button}
-            aria-label="Like"
-            color="secondary"
-          >
-            <FavoriteBorderIcon />
-          </IconButton>
-        )}
-        <span>{(post.likes || []).length}</span>
-        <IconButton
-          className={classes.button}
-          aria-label="Comment"
-          color="secondary"
-        >
-          <CommentIcon />
-        </IconButton>
-        <span>{(post.comments || []).length}</span>
-      </CardActions>
-    </Card>
+          <span>{(post.comments || []).length}</span>
+        </CardActions>
+      </Card>
+    </div>
   );
 };
 
