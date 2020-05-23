@@ -21,13 +21,15 @@ import { Session } from '../models/Session';
 import { Link } from 'react-router-dom';
 import DeleteUser from './DeleteUser';
 import FollowButton from './FollowButton';
-import UsersGrid from './UsersGrid';
+import ProfileTabs from './ProfileTabs';
+import { Post } from '../models/Post';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
     margin: 'auto',
     padding: theme.spacing(3),
     marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(3),
   }),
   title: {
     marginTop: theme.spacing(1),
@@ -41,6 +43,7 @@ const Profile = ({
 }: RouteComponentProps<{ userId?: string }>) => {
   const [user, setUser] = useState<null | User>(null);
   const [redirectToSignIn, setRedirectToSignIn] = useState(false);
+  const [posts, setPosts] = useState<Post[]>([]);
 
   const classes = useStyles();
   const [loggedUser, token] = Session.getToken();
@@ -50,18 +53,30 @@ const Profile = ({
       setRedirectToSignIn(true);
       return;
     }
+    try {
+      const foundUser = await User.findOne(userId, token);
+      setUser(foundUser);
+    } catch (err) {
+      console.error(err);
+      setRedirectToSignIn(true);
+    }
+  };
 
-    User.findOne(userId, token)
-      .then((foundUser) => setUser(foundUser))
-      .catch((err) => {
-        console.error(err);
-        setRedirectToSignIn(true);
-      });
+  const fetchPosts = async () => {
+    if (!token || !user) {
+      return;
+    }
+    const posts = await user.posts(token);
+    setPosts(posts);
   };
 
   useEffect(() => {
     fetchUser();
   }, [userId]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [user]);
 
   if (!loggedUser || !token || redirectToSignIn) {
     return (
@@ -90,6 +105,22 @@ const Profile = ({
       await user.follow(token);
     }
     await fetchUser();
+  };
+
+  const onLike = (post: Post) => async () => {
+    if (!token) {
+      return;
+    }
+    await post.like(token);
+    await fetchPosts();
+  };
+
+  const onDislike = (post: Post) => async () => {
+    if (!token) {
+      return;
+    }
+    await post.dislike(token);
+    await fetchPosts();
   };
 
   return (
@@ -137,10 +168,12 @@ const Profile = ({
                 ).toDateString()}`}
               />
             </ListItem>
-            <Typography>Followers</Typography>
-            <UsersGrid users={user.followers || []} />
-            <Typography>Following</Typography>
-            <UsersGrid users={user.following || []} />
+            <ProfileTabs
+              user={user}
+              posts={posts}
+              onLike={onLike}
+              onDislike={onDislike}
+            />
           </List>
         )}
       </Paper>

@@ -93,7 +93,9 @@ const PostComponent: React.FC<{
             )
           }
           title={
-            <Link to={`/users/${post.postedBy._id}`}>{post.postedBy.name}</Link>
+            <Link to={`/users/${post.postedBy._id}`}>
+              <Typography>{post.postedBy.name}</Typography>
+            </Link>
           }
           subheader={new Date(post.createdAt || new Date()).toDateString()}
           className={classes.cardHeader}

@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   gridList: {
     margin: 'auto',
     width: '100%',
-    height: 220,
+    heigth: '100%',
   },
   tileText: {
     textAlign: 'center',
