@@ -13,6 +13,7 @@ import {
   makeStyles,
   ListItemSecondaryAction,
   IconButton,
+  Container,
 } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import EditIcon from '@material-ui/icons/Edit';
@@ -24,7 +25,6 @@ import UsersGrid from './UsersGrid';
 
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
-    maxWidth: 600,
     margin: 'auto',
     padding: theme.spacing(3),
     marginTop: theme.spacing(5),
@@ -93,53 +93,58 @@ const Profile = ({
   };
 
   return (
-    <Paper className={classes.root} elevation={4}>
-      <Typography variant="h6" className={classes.title}>
-        Profile
-      </Typography>
-      {user && (
-        <List dense>
-          <ListItem>
-            <ListItemAvatar>
-              {user.photo ? (
-                <Avatar src={user.photo.url} />
+    <Container maxWidth="md">
+      <Paper className={classes.root} elevation={4}>
+        <Typography variant="h6" className={classes.title}>
+          Profile
+        </Typography>
+        {user && (
+          <List dense>
+            <ListItem>
+              <ListItemAvatar>
+                {user.photo ? (
+                  <Avatar src={user.photo.url} />
+                ) : (
+                  <Avatar>
+                    <PersonIcon />
+                  </Avatar>
+                )}
+              </ListItemAvatar>
+              <ListItemText primary={user.name} secondary={user.email} />
+              {Session.isAuthenticated() && loggedUser._id == user._id ? (
+                <ListItemSecondaryAction>
+                  <Link to={`/users/${user._id}/edit`}>
+                    <IconButton aria-label="Edit" color="primary">
+                      <EditIcon />
+                    </IconButton>
+                  </Link>
+                  <DeleteUser user={user} token={token} />
+                </ListItemSecondaryAction>
               ) : (
-                <Avatar>
-                  <PersonIcon />
-                </Avatar>
+                <FollowButton
+                  following={isFollowing()}
+                  onClick={onClickFollow}
+                />
               )}
-            </ListItemAvatar>
-            <ListItemText primary={user.name} secondary={user.email} />
-            {Session.isAuthenticated() && loggedUser._id == user._id ? (
-              <ListItemSecondaryAction>
-                <Link to={`/users/${user._id}/edit`}>
-                  <IconButton aria-label="Edit" color="primary">
-                    <EditIcon />
-                  </IconButton>
-                </Link>
-                <DeleteUser user={user} token={token} />
-              </ListItemSecondaryAction>
-            ) : (
-              <FollowButton following={isFollowing()} onClick={onClickFollow} />
-            )}
-          </ListItem>
-          <Divider />
-          <ListItem>
-            <ListItemText
-              primary={user.about}
-              secondary={`Joined: ${(user.createdAt
-                ? new Date(user.createdAt)
-                : new Date()
-              ).toDateString()}`}
-            />
-          </ListItem>
-          <Typography>Followers</Typography>
-          <UsersGrid users={user.followers || []} />
-          <Typography>Following</Typography>
-          <UsersGrid users={user.following || []} />
-        </List>
-      )}
-    </Paper>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemText
+                primary={user.about}
+                secondary={`Joined: ${(user.createdAt
+                  ? new Date(user.createdAt)
+                  : new Date()
+                ).toDateString()}`}
+              />
+            </ListItem>
+            <Typography>Followers</Typography>
+            <UsersGrid users={user.followers || []} />
+            <Typography>Following</Typography>
+            <UsersGrid users={user.following || []} />
+          </List>
+        )}
+      </Paper>
+    </Container>
   );
 };
 

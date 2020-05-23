@@ -11,11 +11,11 @@ import {
   TextField,
   Icon,
   makeStyles,
+  Container,
 } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    maxWidth: 600,
     margin: 'auto',
     textAlign: 'center',
     marginTop: theme.spacing(5),
@@ -69,7 +69,7 @@ const SignIn = ({ location: { state } }: RouteComponentProps) => {
   }
 
   return (
-    <div>
+    <Container maxWidth="md">
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h6" className={classes.title}>
@@ -115,7 +115,7 @@ const SignIn = ({ location: { state } }: RouteComponentProps) => {
           </Button>
         </CardActions>
       </Card>
-    </div>
+    </Container>
   );
 };
 

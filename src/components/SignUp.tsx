@@ -14,12 +14,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Container,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    maxWidth: 600,
     margin: 'auto',
     textAlign: 'center',
     marginTop: theme.spacing(5),
@@ -67,7 +67,7 @@ const SignUp = () => {
     setValues({ ...values, error: '', open: true });
   };
   return (
-    <div>
+    <Container maxWidth="md">
       <Card className={classes.card}>
         <CardContent>
           <Typography variant="h6" className={classes.title}>
@@ -140,7 +140,7 @@ const SignUp = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Container>
   );
 };
 

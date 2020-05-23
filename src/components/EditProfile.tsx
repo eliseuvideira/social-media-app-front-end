@@ -10,13 +10,13 @@ import {
   Typography,
   TextField,
   Icon,
+  Container,
 } from '@material-ui/core';
 import { User } from '../models/User';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    maxWidth: 600,
     margin: 'auto',
     textAlign: 'center',
     marginTop: theme.spacing(5),
@@ -122,86 +122,88 @@ const EditProfile = ({
   };
 
   return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography variant="h6" className={classes.title}>
-          Edit Profile
-        </Typography>
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={onPhotoChange}
-          id="icon-button-file"
-        />
-        <label htmlFor="icon-button-file">
-          <Button variant="contained" color="default" component="span">
-            Upload <AddPhotoAlternateIcon />
-          </Button>
-        </label>
-        <br />
-        <span className={classes.filename}>
-          {values.photo ? values.photo.name : ''}
-        </span>
-        <br />
-        <TextField
-          id="name"
-          label="Name"
-          className={classes.textField}
-          value={values.name}
-          onChange={onChange('name')}
-          margin="normal"
-        />
-        <br />
-        <TextField
-          id="multiline-flexible"
-          label="About"
-          className={classes.textField}
-          multiline
-          rows="2"
-          value={values.about}
-          onChange={onChange('about')}
-        />
-        <br />
-        <TextField
-          id="email"
-          label="Email"
-          className={classes.textField}
-          value={values.email}
-          onChange={onChange('email')}
-          margin="normal"
-        />
-        <br />
-        <TextField
-          id="password"
-          label="Password"
-          type="password"
-          className={classes.textField}
-          value={values.password}
-          onChange={onChange('password')}
-          margin="normal"
-        />
-        <br />
-        {values.error && (
-          <Typography component="p" color="error">
-            <Icon color="error" className={classes.error}>
-              error
-            </Icon>
-            {values.error}
+    <Container maxWidth="md">
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography variant="h6" className={classes.title}>
+            Edit Profile
           </Typography>
-        )}
-      </CardContent>
-      <CardActions>
-        <Button
-          color="primary"
-          variant="contained"
-          onClick={onSubmit}
-          className={classes.submit}
-        >
-          Submit
-        </Button>
-      </CardActions>
-    </Card>
+          <input
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={onPhotoChange}
+            id="icon-button-file"
+          />
+          <label htmlFor="icon-button-file">
+            <Button variant="contained" color="default" component="span">
+              Upload <AddPhotoAlternateIcon />
+            </Button>
+          </label>
+          <br />
+          <span className={classes.filename}>
+            {values.photo ? values.photo.name : ''}
+          </span>
+          <br />
+          <TextField
+            id="name"
+            label="Name"
+            className={classes.textField}
+            value={values.name}
+            onChange={onChange('name')}
+            margin="normal"
+          />
+          <br />
+          <TextField
+            id="multiline-flexible"
+            label="About"
+            className={classes.textField}
+            multiline
+            rows="2"
+            value={values.about}
+            onChange={onChange('about')}
+          />
+          <br />
+          <TextField
+            id="email"
+            label="Email"
+            className={classes.textField}
+            value={values.email}
+            onChange={onChange('email')}
+            margin="normal"
+          />
+          <br />
+          <TextField
+            id="password"
+            label="Password"
+            type="password"
+            className={classes.textField}
+            value={values.password}
+            onChange={onChange('password')}
+            margin="normal"
+          />
+          <br />
+          {values.error && (
+            <Typography component="p" color="error">
+              <Icon color="error" className={classes.error}>
+                error
+              </Icon>
+              {values.error}
+            </Typography>
+          )}
+        </CardContent>
+        <CardActions>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={onSubmit}
+            className={classes.submit}
+          >
+            Submit
+          </Button>
+        </CardActions>
+      </Card>
+    </Container>
   );
 };
 

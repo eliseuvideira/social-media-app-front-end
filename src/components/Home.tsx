@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
     margin: 30,
   },
   card: {
-    maxWidth: 600,
     margin: 'auto',
     marginTop: theme.spacing(5),
     marginBottom: theme.spacing(5),
@@ -45,20 +44,22 @@ const Home = () => {
   const [loggedUser, token] = Session.getToken();
 
   return (
-    <Container maxWidth="lg">
-      <div className={classes.root}>
-        {loggedUser && token ? (
+    <div className={classes.root}>
+      {loggedUser && token ? (
+        <Container maxWidth="lg">
           <Grid container spacing={8} justify="center">
             <Grid item xs={12} md={7}>
               <Newsfeed />
             </Grid>
-            <Hidden mdDown>
-              <Grid item md={5}>
+            <Hidden smDown>
+              <Grid item sm={5}>
                 <FindPeople />
               </Grid>
             </Hidden>
           </Grid>
-        ) : (
+        </Container>
+      ) : (
+        <Container maxWidth="md">
           <Card className={classes.card}>
             <Typography variant="h6" className={classes.title}>
               Home Page
@@ -90,9 +91,9 @@ const Home = () => {
               </Typography>
             </CardContent>
           </Card>
-        )}
-      </div>
-    </Container>
+        </Container>
+      )}
+    </div>
   );
 };
 

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   card: {
-    maxWidth: 600,
+    maxWidth: '90%',
     margin: 'auto',
     marginBottom: theme.spacing(1),
     backgroundColor: 'rgba(0, 0, 0, 0.06)',
