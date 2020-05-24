@@ -56,13 +56,25 @@ const Newsfeed = () => {
     await fetchPosts();
   };
 
+  const onDeletePost = (post: Post) => async () => {
+    if (!token) {
+      return;
+    }
+    await post.delete(token);
+  };
+
   return (
     <Card className={classes.card}>
       <Typography variant="h6" className={classes.title}>
         Newsfeed
       </Typography>
       <Divider />
-      <PostList posts={posts} onLike={onLike} onDislike={onDislike} />
+      <PostList
+        posts={posts}
+        onLike={onLike}
+        onDislike={onDislike}
+        onDeletePost={onDeletePost}
+      />
     </Card>
   );
 };

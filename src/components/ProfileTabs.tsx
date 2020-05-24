@@ -24,7 +24,8 @@ const ProfileTabs: React.FC<{
   posts: Post[];
   onLike: (post: Post) => () => Promise<void>;
   onDislike: (post: Post) => () => Promise<void>;
-}> = ({ user, posts, onLike, onDislike }) => {
+  onDeletePost: (post: Post) => () => Promise<void>;
+}> = ({ user, posts, onLike, onDislike, onDeletePost }) => {
   const [tab, setTab] = useState(0);
 
   const onChange = (_: any, value: number) => {
@@ -48,7 +49,12 @@ const ProfileTabs: React.FC<{
       </AppBar>
       {tab === 0 && (
         <TabContainer>
-          <PostList posts={posts} onLike={onLike} onDislike={onDislike} />
+          <PostList
+            posts={posts}
+            onLike={onLike}
+            onDislike={onDislike}
+            onDeletePost={onDeletePost}
+          />
         </TabContainer>
       )}
       {tab === 1 && (
@@ -70,6 +76,7 @@ ProfileTabs.propTypes = {
   posts: PropTypes.array.isRequired,
   onLike: PropTypes.func.isRequired,
   onDislike: PropTypes.func.isRequired,
+  onDeletePost: PropTypes.func.isRequired,
 };
 
 export default ProfileTabs;

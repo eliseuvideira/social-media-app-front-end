@@ -123,6 +123,13 @@ const Profile = ({
     await fetchPosts();
   };
 
+  const onDeletePost = (post: Post) => async () => {
+    if (!token) {
+      return;
+    }
+    await post.delete(token);
+  };
+
   return (
     <Container maxWidth="md">
       <Paper className={classes.root} elevation={4}>
@@ -173,6 +180,7 @@ const Profile = ({
               posts={posts}
               onLike={onLike}
               onDislike={onDislike}
+              onDeletePost={onDeletePost}
             />
           </List>
         )}

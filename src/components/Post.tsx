@@ -59,17 +59,11 @@ const PostComponent: React.FC<{
   post: Post;
   onClickLike: () => Promise<void>;
   onClickDislike: () => Promise<void>;
-}> = ({ post, onClickLike, onClickDislike }) => {
+  onDeletePost: () => Promise<void>;
+}> = ({ post, onClickLike, onClickDislike, onDeletePost }) => {
   const classes = useStyles();
 
-  const [loggedUser, token] = Session.getToken();
-
-  const deletePost = () => {
-    if (!token) {
-      return;
-    }
-    post.delete(token);
-  };
+  const [loggedUser] = Session.getToken();
 
   return (
     <div className={classes.wrapper}>
@@ -87,7 +81,7 @@ const PostComponent: React.FC<{
           action={
             loggedUser &&
             loggedUser._id === post.postedBy._id && (
-              <IconButton onClick={deletePost}>
+              <IconButton onClick={onDeletePost}>
                 <DeleteIcon />
               </IconButton>
             )
@@ -149,6 +143,7 @@ PostComponent.propTypes = {
   post: PropTypes.any.isRequired,
   onClickLike: PropTypes.func.isRequired,
   onClickDislike: PropTypes.func.isRequired,
+  onDeletePost: PropTypes.func.isRequired,
 };
 
 export default PostComponent;
