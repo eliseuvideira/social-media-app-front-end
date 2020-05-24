@@ -61,6 +61,7 @@ const Newsfeed = () => {
       return;
     }
     await post.delete(token);
+    await fetchPosts();
   };
 
   return (

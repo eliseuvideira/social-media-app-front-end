@@ -128,6 +128,7 @@ const Profile = ({
       return;
     }
     await post.delete(token);
+    await fetchPosts();
   };
 
   return (
