@@ -8,7 +8,7 @@ import {
   makeStyles,
   Container,
 } from '@material-ui/core';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Session } from '../models/Session';
 
@@ -25,10 +25,11 @@ const getColor = (active: boolean): 'secondary' | 'inherit' => {
   return 'inherit';
 };
 
-const Menu = withRouter(({ history }) => {
+const Menu = () => {
   const classes = useStyles();
   const isAuth = Session.isAuthenticated();
   const [user] = Session.getToken();
+  const history = useHistory();
 
   return (
     <AppBar position="static">
@@ -92,6 +93,6 @@ const Menu = withRouter(({ history }) => {
       </Container>
     </AppBar>
   );
-});
+};
 
 export default Menu;
