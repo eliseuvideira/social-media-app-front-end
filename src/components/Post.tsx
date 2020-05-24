@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardHeader,
@@ -18,6 +18,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import CommentIcon from '@material-ui/icons/Comment';
 import PropTypes from 'prop-types';
 import { Post } from '../models/Post';
+import DeletePost from './DeletePost';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -63,6 +64,8 @@ const PostComponent: React.FC<{
 }> = ({ post, onClickLike, onClickDislike, onDeletePost }) => {
   const classes = useStyles();
 
+  const [open, setOpen] = useState(false);
+
   const [loggedUser] = Session.getToken();
 
   return (
@@ -81,7 +84,7 @@ const PostComponent: React.FC<{
           action={
             loggedUser &&
             loggedUser._id === post.postedBy._id && (
-              <IconButton onClick={onDeletePost}>
+              <IconButton onClick={() => setOpen(true)}>
                 <DeleteIcon />
               </IconButton>
             )
@@ -135,6 +138,14 @@ const PostComponent: React.FC<{
           <span>{(post.comments || []).length}</span>
         </CardActions>
       </Card>
+      <DeletePost
+        open={open}
+        onClose={() => setOpen(false)}
+        onDelete={() => {
+          onDeletePost();
+          setOpen(false);
+        }}
+      />
     </div>
   );
 };
