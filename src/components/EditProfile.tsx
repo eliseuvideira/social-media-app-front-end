@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import { User } from '../models/User';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import Loading from './Loading';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -68,24 +69,29 @@ const EditProfile = ({
 
   const [user, token] = Session.getToken();
 
-  useEffect(() => {
+  const [loading, setLoading] = useState(false);
+
+  const fetchUser = async () => {
     if (!token || !userId) {
       setValues({ ...values, redirectToProfile: true });
       return;
     }
-    User.findOne(userId!, token)
-      .then((foundUser) =>
-        setValues({
-          ...values,
-          name: foundUser.name,
-          email: foundUser.email,
-          about: foundUser.about || '',
-        }),
-      )
-      .catch((err) => {
-        console.error(err);
-        setValues({ ...values, redirectToProfile: true });
+    try {
+      const foundUser = await User.findOne(userId!, token);
+      setValues({
+        ...values,
+        name: foundUser.name,
+        email: foundUser.email,
+        about: foundUser.about || '',
       });
+    } catch (err) {
+      console.error(err);
+      setValues({ ...values, redirectToProfile: true });
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
   }, [userId]);
 
   if (!user || !token || user._id !== userId || values.redirectToProfile) {
@@ -96,6 +102,7 @@ const EditProfile = ({
     user.name = values.name;
     user.email = values.email;
     user.about = values.about;
+    setLoading(true);
     try {
       await user.update(
         token,
@@ -105,6 +112,8 @@ const EditProfile = ({
       setValues({ ...values, redirectToProfile: true });
     } catch (err) {
       setValues({ ...values, error: err.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -203,6 +212,7 @@ const EditProfile = ({
           </Button>
         </CardActions>
       </Card>
+      <Loading loading={loading} />
     </Container>
   );
 };

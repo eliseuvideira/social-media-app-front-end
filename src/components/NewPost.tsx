@@ -18,6 +18,7 @@ import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import { User } from '../models/User';
 import { Post } from '../models/Post';
 import PropTypes from 'prop-types';
+import Loading from './Loading';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,6 +81,8 @@ const NewPost: React.FC<{ onAddPost: () => Promise<void> }> = ({
 
   const [loggedUser, token] = Session.getToken();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (loggedUser) {
       setValues({ ...values, user: loggedUser });
@@ -91,12 +94,15 @@ const NewPost: React.FC<{ onAddPost: () => Promise<void> }> = ({
       return;
     }
     const post = new Post({ content: values.content });
+    setLoading(true);
     try {
       await post.insert(token, values.photo);
       setValues({ ...values, error: '', content: '', photo: undefined });
       onAddPost();
     } catch (err) {
       setValues({ ...values, error: err.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -180,6 +186,7 @@ const NewPost: React.FC<{ onAddPost: () => Promise<void> }> = ({
           </Button>
         </CardActions>
       </Card>
+      <Loading loading={loading} />
     </div>
   );
 };
