@@ -19,6 +19,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import PropTypes from 'prop-types';
 import { Post } from '../models/Post';
 import DeletePost from './DeletePost';
+import Lightbox from './Lightbox';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -50,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
   media: {
     height: 200,
+    cursor: 'pointer',
   },
   button: {
     margin: theme.spacing(1),
@@ -65,6 +67,7 @@ const PostComponent: React.FC<{
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
+  const [zoom, setZoom] = useState(false);
 
   const [loggedUser] = Session.getToken();
 
@@ -103,7 +106,16 @@ const PostComponent: React.FC<{
           </Typography>
           {post.photo && (
             <div className={classes.photo}>
-              <img className={classes.media} src={post.photo.url} />
+              <img
+                className={classes.media}
+                src={post.photo.url}
+                onClick={() => setZoom(true)}
+              />
+              <Lightbox
+                open={zoom}
+                onClose={() => setZoom(false)}
+                imageUrl={post.photo.url}
+              />
             </div>
           )}
         </CardContent>
