@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/Close';
-import { makeStyles, IconButton } from '@material-ui/core';
+import { makeStyles, IconButton, Fade } from '@material-ui/core';
 
 const useStyles = makeStyles({
   lightbox: {
@@ -40,27 +40,25 @@ const Lightbox: React.FC<{
 }> = ({ open, onClose, imageUrl }) => {
   const classes = useStyles();
 
-  if (!open) {
-    return null;
-  }
+  const clickClose = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <div
-      className={classes.lightbox}
-      onClick={() => {
-        if (onClose) {
-          onClose();
-        }
-      }}
-    >
-      <IconButton className={classes.closeIcon}>
-        <CloseIcon />
-      </IconButton>
-      <img
-        className={classes.image}
-        src={imageUrl}
-        onClick={(event) => event.stopPropagation()}
-      />
-    </div>
+    <Fade in={open}>
+      <div className={classes.lightbox} onClick={clickClose}>
+        <IconButton className={classes.closeIcon} onClick={clickClose}>
+          <CloseIcon />
+        </IconButton>
+        <img
+          className={classes.image}
+          src={imageUrl}
+          onClick={(event) => event.stopPropagation()}
+        />
+      </div>
+    </Fade>
   );
 };
 
