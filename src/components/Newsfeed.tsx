@@ -3,6 +3,7 @@ import { makeStyles, Card, Typography, Divider } from '@material-ui/core';
 import PostList from './PostList';
 import { Post } from '../models/Post';
 import { Session } from '../models/Session';
+import NewPost from './NewPost';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -69,6 +70,8 @@ const Newsfeed = () => {
       <Typography variant="h6" className={classes.title}>
         Newsfeed
       </Typography>
+      <Divider />
+      <NewPost onAddPost={() => fetchPosts()} />
       <Divider />
       <PostList
         posts={posts}

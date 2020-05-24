@@ -79,15 +79,21 @@ export class Post implements IPost {
     this.photo = photo;
   }
 
-  public async insert(token: string): Promise<Post> {
+  public async insert(
+    token: string,
+    photo: File | undefined = undefined,
+  ): Promise<Post> {
+    const formData = new FormData();
+    formData.append('content', this.content);
+    photo && formData.append('photo', photo);
+
     const response = await fetch(`${apiUrl}/posts`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ content: this.content }),
+      body: formData,
     });
     const data = await response.json();
     if (response.status !== 201) {
