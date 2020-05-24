@@ -293,4 +293,20 @@ export class User implements IUser {
     }
     return data.posts.map((post: any) => new Post(post));
   }
+
+  public async feed(token: string) {
+    const response = await fetch(`${apiUrl}/users/${this._id}/feed`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await response.json();
+    if (response.status !== STATUS_OK) {
+      throw new Error(data.error.message);
+    }
+    return data.posts.map((post: any) => new Post(post));
+  }
 }

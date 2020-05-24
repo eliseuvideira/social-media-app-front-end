@@ -27,13 +27,13 @@ const Newsfeed = () => {
 
   const [posts, setPosts] = useState<Post[]>([]);
 
-  const [, token] = Session.getToken();
+  const [user, token] = Session.getToken();
 
   const fetchPosts = async () => {
-    if (!token) {
+    if (!user || !token) {
       return;
     }
-    const foundPosts = await Post.find(token);
+    const foundPosts = await user.feed(token);
     setPosts(foundPosts);
   };
 
