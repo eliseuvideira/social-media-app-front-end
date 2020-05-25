@@ -1,0 +1,14 @@
+version: '3.6'
+
+services:
+  nginx:
+    build: 
+      context: '.'
+      args:
+        - API_URL=${API_URL}
+    container_name: 'social-media-app-frontend'
+    ports:
+      - '80:80'
+    restart: 'always'
+    environment:
+      - 'NODE_ENV=production'
