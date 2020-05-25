@@ -65,6 +65,22 @@ const Newsfeed = () => {
     await fetchPosts();
   };
 
+  const onComment = (post: Post) => async (content: string) => {
+    if (!token) {
+      return;
+    }
+    await post.comment(token, content);
+    await fetchPosts();
+  };
+
+  const onUncomment = (post: Post) => async (commentId: string) => {
+    if (!token || !user) {
+      return;
+    }
+    await post.uncomment(token, commentId);
+    await fetchPosts();
+  };
+
   return (
     <Card className={classes.card}>
       <Typography variant="h6" className={classes.title}>
@@ -78,6 +94,8 @@ const Newsfeed = () => {
         onLike={onLike}
         onDislike={onDislike}
         onDeletePost={onDeletePost}
+        onComment={onComment}
+        onUncomment={onUncomment}
       />
     </Card>
   );

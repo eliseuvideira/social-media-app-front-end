@@ -131,6 +131,22 @@ const Profile = ({
     await fetchPosts();
   };
 
+  const onComment = (post: Post) => async (content: string) => {
+    if (!token) {
+      return;
+    }
+    await post.comment(token, content);
+    await fetchPosts();
+  };
+
+  const onUncomment = (post: Post) => async (commentId: string) => {
+    if (!token || !user) {
+      return;
+    }
+    await post.uncomment(token, commentId);
+    await fetchPosts();
+  };
+
   return (
     <Container maxWidth="md">
       <Paper className={classes.root} elevation={4}>
@@ -182,6 +198,8 @@ const Profile = ({
               onLike={onLike}
               onDislike={onDislike}
               onDeletePost={onDeletePost}
+              onComment={onComment}
+              onUncomment={onUncomment}
             />
           </List>
         )}

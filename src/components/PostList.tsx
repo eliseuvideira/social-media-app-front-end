@@ -8,7 +8,9 @@ const PostList: React.FC<{
   onLike: (post: Post) => () => Promise<void>;
   onDislike: (post: Post) => () => Promise<void>;
   onDeletePost: (post: Post) => () => Promise<void>;
-}> = ({ posts, onLike, onDislike, onDeletePost }) => {
+  onComment: (post: Post) => (content: string) => Promise<void>;
+  onUncomment: (post: Post) => (commentId: string) => Promise<void>;
+}> = ({ posts, onLike, onDislike, onDeletePost, onComment, onUncomment }) => {
   return (
     <div style={{ marginTop: '24px' }}>
       {posts.map((post) => (
@@ -18,6 +20,8 @@ const PostList: React.FC<{
           onClickLike={onLike(post)}
           onClickDislike={onDislike(post)}
           onDeletePost={onDeletePost(post)}
+          onComment={onComment(post)}
+          onUncomment={onUncomment(post)}
         />
       ))}
     </div>
@@ -29,6 +33,8 @@ PostList.propTypes = {
   onLike: PropTypes.func.isRequired,
   onDislike: PropTypes.func.isRequired,
   onDeletePost: PropTypes.func.isRequired,
+  onComment: PropTypes.func.isRequired,
+  onUncomment: PropTypes.func.isRequired,
 };
 
 export default PostList;

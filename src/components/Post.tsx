@@ -8,6 +8,7 @@ import {
   CardContent,
   CardActions,
   makeStyles,
+  Divider,
 } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import { Session } from '../models/Session';
@@ -20,6 +21,7 @@ import PropTypes from 'prop-types';
 import { Post } from '../models/Post';
 import DeletePost from './DeletePost';
 import Lightbox from './Lightbox';
+import Comments from './Comments';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -63,7 +65,16 @@ const PostComponent: React.FC<{
   onClickLike: () => Promise<void>;
   onClickDislike: () => Promise<void>;
   onDeletePost: () => Promise<void>;
-}> = ({ post, onClickLike, onClickDislike, onDeletePost }) => {
+  onComment: (content: string) => Promise<void>;
+  onUncomment: (commentId: string) => Promise<void>;
+}> = ({
+  post,
+  onClickLike,
+  onClickDislike,
+  onDeletePost,
+  onComment,
+  onUncomment,
+}) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -149,6 +160,12 @@ const PostComponent: React.FC<{
           </IconButton>
           <span>{(post.comments || []).length}</span>
         </CardActions>
+        <Divider />
+        <Comments
+          comments={post.comments || []}
+          onComment={onComment}
+          onUncomment={onUncomment}
+        />
       </Card>
       <DeletePost
         open={open}
@@ -167,6 +184,8 @@ PostComponent.propTypes = {
   onClickLike: PropTypes.func.isRequired,
   onClickDislike: PropTypes.func.isRequired,
   onDeletePost: PropTypes.func.isRequired,
+  onComment: PropTypes.func.isRequired,
+  onUncomment: PropTypes.func.isRequired,
 };
 
 export default PostComponent;

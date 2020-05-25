@@ -165,4 +165,37 @@ export class Post implements IPost {
     }
     return new Post(data);
   }
+
+  public async comment(token: string, content: string) {
+    const response = await fetch(`${apiUrl}/posts/${this._id}/comments`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content }),
+    });
+    const data = await response.json();
+    if (response.status !== 201) {
+      throw new Error(data.error.message);
+    }
+  }
+
+  public async uncomment(token: string, commentId: any) {
+    const response = await fetch(
+      `${apiUrl}/posts/${this._id}/comments/${commentId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    if (response.status !== 204) {
+      const data = await response.json();
+      throw new Error(data.error.message);
+    }
+  }
 }
