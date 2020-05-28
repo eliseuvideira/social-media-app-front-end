@@ -1,5 +1,4 @@
 FROM node:14-alpine as build
-ARG API_URL=$API_URL
 WORKDIR /usr/src/app
 COPY package.json yarn.lock ./
 RUN yarn install
